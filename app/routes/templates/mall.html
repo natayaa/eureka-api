@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ rohan_title }}</title>
+    <link href="{{ url_for('static', path='assets/icons/favicon.ico') }}" rel="icon">
+    {% include 'static/includes/stylesheets.html' %}
+    <link ref="stylesheet" href="{{ url_for('static', path='css/mall.css') }}">
+</head>
+<body>
+    <!-- HEADER NAVIGATION -->
+    {% include 'static/includes/navbar.html' %}
+    <main>
+        <div class="container mt-5">
+            <div class="row mt-5 mb-5">
+                <div class="col-lg-2">
+                    <div class="row">
+                        <div class="col-lg mt-5">
+                            <div class="text-center">
+                                <h5>Category</h5>
+                            </div>
+                            <div class="mt-3" style="border: 0.8px solid #393838; padding: 8px;">
+                                tsg
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- TABLE OF KIOSK KONTENTS ?-->
+                <div class="col-lg-10">
+                    <section style="background-color: transparent;">
+                        <div class="container">
+                            <div id="itemContainer"></div>
+                        </div>
+                        <div id="paginationContainer" class="pagination">
+                            <!-- Pagination buttons will be dynamically inserted here -->
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </main>
+    {% include 'static/includes/footer.html' %}
+    {% include 'static/includes/scripts.html' %}
+    <script src="{{ url_for('static', path='js/kiosk-load.js') }}"></script>
+</body>
+</html>

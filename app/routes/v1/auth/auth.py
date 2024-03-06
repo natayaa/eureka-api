@@ -17,7 +17,7 @@ async def auth_endpoint(response: Response, login_form: Annotated[OAuth2Password
     token_expires = timedelta(minutes=int(config("ACCESS_TOKEN_VOID")))
     access_token = await create_access_token(data={"sub": user.login_id}, expires_date=token_expires)
     response.set_cookie(key="application_auth_token", value=access_token, expires=15, path="/")
-    
+    response.headers['X-User-Category'] = "Authenticated User"
     return {"application_auth_token": access_token, "type": "Bearer"}
 
 

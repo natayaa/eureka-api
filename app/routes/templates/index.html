@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ rohan_title }}</title>
+    <link href="{{ url_for('static', path='assets/icons/favicon.ico') }}" rel="icon">
+    {% include 'static/includes/stylesheets.html' %}
+</head>
+<body >
+    <section id="hero">
+        <div class="hero-container">            
+            <a href="/" class="hero-logo" data-aos="zoom-in">
+                <img src="{{ url_for('static', path='assets/images/hero-logo.png') }}" alt="">
+            </a>
+            <h1 data-aos="zoom-in">Welcome to Rohan Online</h1>
+            <h2 data-aos="fade-up">Pioneer of Revolution</h2>
+            <a data-aos="fade-up" data-aos-delay="200" href="#about" class="btn-get-started scrollto">Get Started</a>
+        </div>
+    </section>
+
+    <!-- HEADER -->
+    <header id="header" class="d-flex align-items-center">
+        <div class="container d-flex align-items-center justify-content-between">
+            <div class="logo">
+                <a href="/">
+                    <img src="{{ url_for('static', path='assets/images/logo.png') }}" alt="" class="img-fluid">
+                    {{ rohan_title }}
+                </a>
+            </div>
+            <!-- NAVBAR -->
+            <nav id="navbar" class="navbar">
+                <ul>
+                    <li>
+                        <a class="nav-link scrollto active" href="#hero">Home</a>
+                    </li>
+                    <li>
+                        <a class="nav-link scrollto" href="#about">Information</a>
+                    </li>
+                    <li>
+                        <a class="nav-link scrollto" href="#serverContent">Server Content</a>
+                    </li>
+                    <li>
+                        <a class="nav-link scrollto" href="#service">Ranking</a>
+                    </li>
+                    <li class="dropdown">
+                        <a class="btn btn-wrap">Download</a>
+                        <ul>
+                            <li>
+                                <a>Server 1</a>
+                            </li>
+                            <li>
+                                <a>Server 2</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a class="nav-link scrollto" id='mall-kiosk' href="/web-mall">Mall</a>
+                    </li>
+                    {% if not is_user %}
+                    <li>
+                        <a class="btn btn-wrap" data-bs-toggle="modal" data-bs-target="#registerUser">Register</a>
+                    </li>
+                    {% endif %}
+                    {% if is_user %}
+                    <li class="dropdown">
+                        <a class="btn btn-wrap">
+                            <i class="bi bi-person-circle"><span> {{ login_user }}</span></i>
+                        </a>
+                        <ul>
+                            <li>
+                                <a>{{ user_email }}</a>
+                            </li>
+                            <li>
+                                <a>Point : {{ user_point }} </a>
+                            </li>
+                            <li class="dropdown">
+                                <a id="deauthenticate"><span>Logout</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    {% else %}
+                    <li>
+                        <a class="btn btn-wrap" data-bs-toggle="modal" data-bs-target="#loginUser">Login</a>
+                    </li>
+                    {% endif %}
+                </ul>
+                <i class="bi bi-list mobile-nav-toggle"></i>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section id="about" class="about">
+            <div class="container">
+                <div class="section-title" data-aos="fade-up">
+                    <h2>Server Information</h2>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6" data-aos="fade-right">
+                        <div class="carousel-container">
+                            <div id="characterCarousel" class="carousel slide" data-bs-ride="carousel">
+                                <div class="carousel-inner">
+                                    <div class="carousel-item active">
+                                        <h6 class="text-center">RACE : <strong>DEKAN</strong></h6>
+                                        <img src="{{ url_for('static', path='assets/images/carousel/dekan.jpg') }}" class="img-fluid" alt="Image">
+                                    </div>
+                                    <div class="carousel-item">
+                                        <h6 class="text-center">RACE : <strong>AESIR</strong></h6>
+                                        <img src="{{ url_for('static', path='assets/images/carousel/aesir.jpg') }}" class="img-fluid">
+                                    </div>
+                                    <div class="carousel-item">
+                                        <h6 class="text-center">RACE : <strong>DARK ELF</strong></h6>
+                                        <img src="{{ url_for('static', path='assets/images/carousel/darkelf.jpg') }}" class="img-fluid">
+                                    </div>
+                                    <div class="carousel-item">
+                                        <h6 class="text-center">RACE : <strong>DHAN</strong></h6>
+                                        <img src="{{ url_for('static', path='assets/images/carousel/dhan.jpg') }}" class="img-fluid">
+                                    </div>
+                                    <div class="carousel-item">
+                                        <h6 class="text-center">RACE : <strong>HUMAN</strong></h6>
+                                        <img src="{{ url_for('static', path='assets/images/carousel/human.png') }}" class="img-fluid">
+                                    </div>
+                                    <div class="carousel-item">
+                                        <h6 class="text-center">RACE : <strong>HALF ELF</strong></h6>
+                                        <img src="{{ url_for('static', path='assets/images/carousel/ranger.jpg') }}" class="img-fluid">
+                                    </div>
+                                    <div class="carousel-item">
+                                        <h6 class="text-center">RACE : <strong>ELF</strong></h6>
+                                        <img src="{{ url_for('static', path='assets/images/carousel/elf.jpg') }}" class="img-fluid">
+                                    </div>
+                                    <div class="carousel-item">
+                                        <h6 class="text-center">RACE : <strong>TRINITY</strong></h6>
+                                        <img src="{{ url_for('static', path='assets/images/carousel/trinity.webp') }}" class="img-fluid">
+                                    </div>
+                                </div>
+                                <button class="carousel-control-prev" type="button" data-bs-target="#characterCarousel" data-bs-slide="prev">
+                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Previous</span>
+                                </button>
+                                <button class="carousel-control-next" type="button" data-bs-target="#characterCarousel" data-bs-slide="next">
+                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Next</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6" data-aos="fade-up">
+                        <div class="content pt-4 pt-lg-0 pl-0 pl-lg-3 text-center">
+                            <h3>Isi Server Information</h3>
+                            <p class="fst-italic"></p>
+                            <ul>
+                                <li><i class="bx bx-check-double"></i> kashgljashfgkjshdjgfhkdghksdglkjsfg</li>
+                                <!-- Dynamic from server information -->
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="serverContent" class="about">
+            {% include "static/includes/gamecontent.html" %}
+        </section>
+
+        <section id="service" class="service">
+            {% include "static/includes/ranking.html" %}
+        </section>
+
+        <div class="modal fade" id="loginUser" tabindex="-1" role="dialog" aria-labelledby="Login User" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header text-center">
+                        <h5 class="modal-title font-weight-bold">Login</h5>
+                    </div>
+                    <div class="modal-body">
+                        <form id="LoginFormUser">
+                            <div class="mb-3">
+                                <div class="input-group">
+                                    <div class="input-group-text">
+                                        <i class="bi bi-person"></i>
+                                    </div>
+                                    <input type="text" class="form-control" id="username" name="username" placeholder="Username" required>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <div class="input-group">
+                                    <div class="input-group-text">
+                                        <i class="bi bi-lock-fill"></i>
+                                    </div>
+                                    <input type="password" class="form-control" id="password" name="password" placeholder="*******" required>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <p class="text-center" id="loginResult">
+                                    
+                                </p>
+                            </div>
+                            <div class="modal-footer d-flex justify-content-center">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Login</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="registerUser" tabindex="-1" role="dialog" aria-labelledby="registerUser" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title font-weight-bold">User Registration</h5>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="mb-3">
+                                <div class="input-group">
+                                    <div class="input-group-text">
+                                        <i class="bi bi-envelope-open"></i>
+                                    </div>
+                                    <input type="email" class="form-control" id="user-email" placeholder="Email" required>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <div class="input-group">
+                                    <div class="input-group-text">
+                                        <i class="bi bi-person-badge"></i>
+                                    </div>
+                                    <input type="text" class="form-control" id="username" placeholder="Username" required>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <div class="input-group">
+                                    <div class="input-group-text">
+                                        <i class="bi bi-lock-fill"></i>
+                                    </div>
+                                    <input type="password" class="form-control" id="user-password" placeholder="Your password" required>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <div class="input-group">
+                                    <div class="input-group-text">
+                                        <i class="bi bi-lock-fill"></i>
+                                    </div>
+                                    <input type="password" class="form-control" id="user-security" placeholder="Numeric Only" required>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <p class="text-center">
+                                    Result Register
+                                </p>
+                            </div>
+                            <div class="modal-footer d-flex justify-content-center">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Register</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% include 'static/includes/footer.html' %}
+        <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+    </main>
+    {% include 'static/includes/scripts.html' %}
+    <!--script src="{{ url_for('static', path='js/onload_index.js') }}"></script-->
+    <script src="{{ url_for('static', path='js/authenticate.js') }}"></script>
+    <script>
+        {% if avail_user %}
+        document.addEventListener("DOMContentLoaded", async function() {
+            const logout = document.getElementById("deauthenticate");
+            logout.addEventListener("click", async function(event) {
+                event.preventDefault();
+                try {
+                    // Send a DELETE request to the logout endpoint
+                    const response = await fetch("/application/directory/routes/authenticate/user-token", {
+                        method: "DELETE",
+                        headers: {
+                            "Content-Type": "application/json"
+                        }
+                    });
+
+                    // Check if the request was successful
+                    if (response.ok) {
+                        // Clear cookies by setting an empty value and an expired date
+                        document.cookie = "auth_platform_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; samesite=none; secure=true;";
+                        // Redirect the user to the login page or any other appropriate page
+                        window.location.href = "/"; // Change "/login" to your actual login page URL
+                    } else {
+                        // Handle errors if the logout request fails
+                        console.error("Logout failed:", response.status, response.statusText);
+                    }
+                } catch (error) {
+                    // Handle network errors or other exceptions
+                    console.error("An error occurred during logout:", error);
+                }
+            });
+        });
+
+        {% endif %}
+    </script>
+</body>
+</html>

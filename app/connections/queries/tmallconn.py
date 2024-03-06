@@ -29,9 +29,7 @@ class KioskMall:
 
     async def getMall(self, search: str = None, limit=int, offset=int):
         """
-            Return dictionary contain:
-            - items
-            - total_records
+            return list
         """
         try:
             items = self.session.query(TItemMall).order_by(TItemMall.mall_id)
@@ -45,7 +43,8 @@ class KioskMall:
                 ))
             
             self.update_total_item() # count records and update selected attribute
-            return items.limit(limit).offset(offset).all()
+            data = items.limit(limit).offset(offset).all()
+            return data
         except IntegrityError as ie:
             return None
 

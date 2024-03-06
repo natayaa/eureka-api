@@ -1,4 +1,4 @@
-from fastapi import APIRouter, status, Request, HTTPException, Depends
+from fastapi import APIRouter, status, Request, HTTPException, Depends, Header
 from fastapi.responses import JSONResponse
 from typing_extensions import Annotated
 
@@ -12,6 +12,8 @@ user = APIRouter(prefix="/application/api/v1/routes/user", tags=['API User'])
 
 @user.get("/detail", response_class=JSONResponse)
 def get_user(application_auth_token: str = Depends(get_current_user)):
+    if not application_auth_token:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
     konteks = {"user_detail": UserDetail(login_id_user=application_auth_token.get("login_id"),
                       email_user=application_auth_token.get("email"),
                       point_user=application_auth_token.get("point"),
@@ -34,5 +36,6 @@ def change_password(user_id: int, application_auth_token: Annotated[str, Depends
     if user_id != application_auth_token.get("user_id"):
         raise HTTPException(status_code=status.HTTP_406_NOT_ACCEPTABLE)
     
+    change_pw = UserConnections().change_user_password(user_id=user_id, new_password=change_password_payload.new_password)
     konteks = {"message": None}
     return konteks

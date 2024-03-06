@@ -16,7 +16,7 @@ class KioskDetail(BaseModel):
     
 class Kiosk(BaseModel):
     mall_id: int
-    kiosk_detail: List[KioskDetail]
+    kiosk_detail: KioskDetail
 
 class KioskResponse(BaseModel):
     status: int

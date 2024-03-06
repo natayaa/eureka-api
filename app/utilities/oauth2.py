@@ -23,7 +23,7 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_schemes)]):
         username: str = payload.get("sub")
 
         if username is None:
-            return False
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token or token doesn't exist.")
         
     except JWTError as jwterr:
         print(f"Bearer <unidentified_token>: {jwterr}")

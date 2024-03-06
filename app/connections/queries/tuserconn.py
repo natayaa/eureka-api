@@ -35,3 +35,17 @@ class UserConnections:
             print(ie)
             self.DBSession.rollback()
             return False
+        
+    def change_user_password(self, user_id: int, new_password: str) -> bool:
+        try:
+            query = self.DBSession.query(TUser).filter_by(user_id=user_id).first()
+            if query:
+                query.login_pw = md5(new_password.encode("utf-8")).hexdigest()
+                self.DBSession.commit()
+                return True
+            else:
+                return False
+        except IntegrityError as ie:
+            self.DBSession.rollback()
+            print(ie)
+            return False

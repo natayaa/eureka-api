@@ -1,0 +1,85 @@
+<header class="d-flex align-items-center" id="header">
+    <div class="container d-flex align-items-center justify-content-between">
+        <div class="logo">
+            <a href="/"><img src="{{ url_for('static', path='assets/images/logo.png') }}" alt="Home Page" class="img-fluid"></a>
+            {{ rohan_title }}
+        </div>
+        <nav id="navbar" class="navbar">
+            <ul>
+                <li>
+                    <a class="nav-link active" href="/">Home</a>
+                </li>
+                <li>
+                    <a class="nav-link" href="/">Guild</a>
+                </li>
+                <li>
+                    <a class="nav-link" href="/">Nickname Change</a>
+                </li>
+                {% if is_user %}
+                <li class="dropdown">
+                    <a class="btn btn-wrap">
+                        <i class="bi bi-person-circle"> 
+                            <span>Welcome, {{ login_user }}</span>
+                        </i>
+                    </a>
+                    <ul>
+                        <li>
+                            <a>
+                                Email: {{ user_email }}
+                            </a>
+                        </li>
+                        <li>
+                            <a>Mall Point : {{ user_point }}</a>
+                        </li>
+                        <li>
+                            <a>Add Point : Teuing kamana nya</a>
+                        </li>
+                        <li>
+                            <a class="btn btn-outline-warning" id="deauthenticate">Logout</a>
+                        </li>
+                    </ul>
+                </li>
+                {% else %}
+                <li>
+                    <a>Guest</a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<script>
+    {% if avail_user %}
+    document.addEventListener("DOMContentLoaded", async function() {
+        const logout = document.getElementById("deauthenticate");
+        logout.addEventListener("click", async function(event) {
+            event.preventDefault();
+            try {
+                // Send a DELETE request to the logout endpoint
+                const response = await fetch("/application/directory/routes/authenticate/user-token", {
+                    method: "DELETE",
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+                });
+
+                // Check if the request was successful
+                if (response.ok) {
+                    // Clear cookies by setting an empty value and an expired date
+                    document.cookie = "auth_platform_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; samesite=none; secure=true;";
+                    // Redirect the user to the login page or any other appropriate page
+                    window.location.href = "/"; // Change "/login" to your actual login page URL
+                } else {
+                    // Handle errors if the logout request fails
+                    console.error("Logout failed:", response.status, response.statusText);
+                }
+            } catch (error) {
+                // Handle network errors or other exceptions
+                console.error("An error occurred during logout:", error);
+            }
+        });
+    });
+
+    {% endif %}
+</script>
