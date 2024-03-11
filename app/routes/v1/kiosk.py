@@ -19,8 +19,8 @@ async def get_kiosk(response: Response,
               offset: int = Query(1, alias="page"),
               limit: int = Query(10, alias="perpage"),
               application_auth_token: str = Cookie(None)):
-
-    kiosk_items = await kiosk_conn.getMall(search, limit, offset)
+    perpage = (offset - 1) * limit
+    kiosk_items = await kiosk_conn.getMall(search, limit, perpage)
     showed_kiosk_detail = [Kiosk(mall_id=item.mall_id, 
                                  kiosk_detail=
                                      KioskDetail(
@@ -37,7 +37,11 @@ async def get_kiosk(response: Response,
     konteks = {"status": status.HTTP_200_OK,
                "total_records": kiosk_conn.total_items_in_kiosk, 
                "kiosk_items": showed_kiosk_detail}
-
+    
+    if not application_auth_token:
+        response.headers['X-User-Status'] = "Anonymous"
+    else:
+        response.headers['X-User-Status'] = f"User {application_auth_token.get("login_id")}"
     
     return konteks
 

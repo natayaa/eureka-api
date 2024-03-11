@@ -29,12 +29,10 @@
                 <!-- TABLE OF KIOSK KONTENTS ?-->
                 <div class="col-lg-10">
                     <section style="background-color: transparent;">
-                        <div class="container">
-                            <div id="itemContainer"></div>
-                        </div>
-                        <div id="paginationContainer" class="pagination">
+                        <div id="itemContainer" style="overflow-y: auto; max-height: 500px;"></div>
+                        <nav id="paginationContainer" class="pagination">
                             <!-- Pagination buttons will be dynamically inserted here -->
-                        </div>
+                        </nav>
                     </section>
                 </div>
             </div>
@@ -42,6 +40,6 @@
     </main>
     {% include 'static/includes/footer.html' %}
     {% include 'static/includes/scripts.html' %}
-    <script src="{{ url_for('static', path='js/kiosk-load.js') }}"></script>
+    <script src="{{ url_for('static', path='js/kiosk.js') }}"></script>
 </body>
 </html>

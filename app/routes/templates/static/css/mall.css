@@ -4,29 +4,38 @@
     gap: 40px;
   }
   
-  .item-card {
-    background-color: #fff;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    border-radius: 5px;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    width: 100%; /* Ensure equal width for responsive cards */
-  }
-  
-  .image-container {
-    flex-grow: 1;
-    text-align: center;
-  }
-  
-  .item-details {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-  }
+@media (max-width: 768px) {
+    #items-container {
+      gap: 20px; /* Adjust gap for smaller screens */
+    }
+}
   
 
-  .item-row {
-    display: flexbox;
-    padding: 10px;
-  }
+.item-card {
+  background-color: #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  border: 1px solid rgb(17, 15, 15);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  width: 100%; /* Ensure equal width for responsive cards */
+}
+
+.image-container {
+  flex-grow: 1;
+  text-align: center;
+  
+}
+
+.item-details {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+
+.item-row {
+  display: flexbox;
+  padding: 10px;
+}
