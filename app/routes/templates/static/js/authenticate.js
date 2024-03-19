@@ -20,8 +20,6 @@ document.addEventListener("DOMContentLoaded", function() {
             });
             
             if (response.ok) {
-                // Authentication successful
-                // const tokenData = await response.json();
                 window.location.reload();
             } else {
                 // Authentication failed

@@ -15,7 +15,7 @@
                 <li>
                     <a class="nav-link" href="/">Nickname Change</a>
                 </li>
-                {% if is_user %}
+                {% if avail_user %}
                 <li class="dropdown">
                     <a class="btn btn-wrap">
                         <i class="bi bi-person-circle"> 
@@ -57,7 +57,7 @@
             event.preventDefault();
             try {
                 // Send a DELETE request to the logout endpoint
-                const response = await fetch("/application/directory/routes/authenticate/user-token", {
+                const response = await fetch("/application/api/v1/directory/authentication/tokenizer", {
                     method: "DELETE",
                     headers: {
                         "Content-Type": "application/json"

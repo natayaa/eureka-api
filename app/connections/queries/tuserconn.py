@@ -5,7 +5,7 @@ from hashlib import md5
 # import relay connection engine
 from connections.db import DatabaseConnection, UserDatabase
 # import table object
-from connections.objects.tbusers import TUser
+from connections.objects.tbusers import TUser, TUserLogon
 
 
 class UserConnections:
@@ -49,3 +49,18 @@ class UserConnections:
             self.DBSession.rollback()
             print(ie)
             return False
+        
+    def web_cache_access(self, user_id, login_id, refresh_token):
+        try:
+            web_access = TUserLogon()
+            web_access.user_id = user_id
+            web_access.login_id = login_id
+            web_access.refresh_token = refresh_token
+            self.DBSession.add(web_access)
+            self.DBSession.commit()
+            return True
+        except IntegrityError as e:
+            print(e)
+            self.DBSession.rollback()
+            return None
+        

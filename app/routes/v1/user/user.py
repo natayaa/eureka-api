@@ -13,7 +13,8 @@ user = APIRouter(prefix="/application/api/v1/routes/user", tags=['API User'])
 @user.get("/detail", response_class=JSONResponse)
 def get_user(application_auth_token: str = Depends(get_current_user)):
     if not application_auth_token:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
+                            detail="You're not authenticate, please do login")
     konteks = {"user_detail": UserDetail(login_id_user=application_auth_token.get("login_id"),
                       email_user=application_auth_token.get("email"),
                       point_user=application_auth_token.get("point"),

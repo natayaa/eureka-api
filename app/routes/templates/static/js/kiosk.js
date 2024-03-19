@@ -4,11 +4,15 @@ async function call_kiosk(search=null, page=1, perPage=10) {
         if (search !== null) {
             url = `/application/api/v1/routes/kiosk/item_malls?search=${search}&page=${page}&perpage=${perPage}`;
         }
-
+        
+        // Extract access token from cookie
+        const cookies = document.cookie;
+        
         const response = await fetch(url, {
             method: "GET",
             headers: {
                 "Accept": "application/json",
+                "Cookie": cookies
             },
         });
 
@@ -88,6 +92,11 @@ function createItemCard(item) {
     itemDescription.textContent = item.kiosk_detail.item_desc;
     itemDescription.style.fontSize = "1em"; // Responsive font size
 
+    const itemStock = document.createElement("h3");
+    itemStock.classList.add("h6", "fw-light", "text-gray", "mt-2");
+    itemStock.textContent = `Stock: ${item.kiosk_detail.item_stock}`;
+    itemStock.style.fontSize = "1em";
+
     const itemPrice = document.createElement("div");
     itemPrice.classList.add("d-flex", "justify-content-between", "align-items-center", "mt-3");
 
@@ -113,6 +122,7 @@ function createItemCard(item) {
     // Append elements to footer div
     footerDiv.appendChild(itemName);
     footerDiv.appendChild(itemDescription);
+    footerDiv.appendChild(itemStock);
     footerDiv.appendChild(itemPrice);
 
     // Append footer div to item card

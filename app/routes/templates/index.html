@@ -286,7 +286,7 @@
                     // Check if the request was successful
                     if (response.ok) {
                         // Clear cookies by setting an empty value and an expired date
-                        document.cookie = "auth_platform_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; samesite=none; secure=true;";
+                        // document.cookie = "auth_platform_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; samesite=none; secure=true;";
                         // Redirect the user to the login page or any other appropriate page
                         window.location.href = "/"; // Change "/login" to your actual login page URL
                     } else {

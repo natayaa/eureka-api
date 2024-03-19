@@ -9,16 +9,16 @@ index_page = APIRouter(tags=['HOME Page'], include_in_schema=False)
 template = Jinja2Templates("routes/templates/")
 
 @index_page.get("/", response_class=HTMLResponse)
-async def get_index(request: Request, application_auth_token: str = Cookie(None)):
+async def get_index(request: Request, access_token: str = Cookie(None)):
     konteks = {"request": request, "rohan_title": config("API_TITLE"),
                "is_user": None, "login_user": None, "user_email": None, "user_point": None}
     
-    if application_auth_token:
-        user = await get_current_user(application_auth_token)
+    if access_token:
+        user = await get_current_user(access_token)
         if user:
             konteks.update({"is_user": True, "login_user": user.get("login_id"),
                         "user_email": user.get("email"), "user_point": user.get("point")})
         else:
             raise HTTPException(status_code=status.HTTP_410_GONE)
-
+    
     return template.TemplateResponse("index.html", context=konteks, status_code=status.HTTP_200_OK)

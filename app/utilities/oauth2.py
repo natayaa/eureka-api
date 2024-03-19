@@ -5,7 +5,7 @@ from decouple import config
 import hashlib
 
 from fastapi.security import OAuth2PasswordBearer
-from fastapi import HTTPException, status
+from fastapi import HTTPException, status, Header
 from fastapi import Depends
 
 from connections.queries.tuserconn import UserConnections
@@ -13,33 +13,49 @@ from connections.queries.tuserconn import UserConnections
 oauth2_schemes = OAuth2PasswordBearer(tokenUrl=config("AUTH_TOKEN_ROUTE"))
 user_connection = UserConnections()
 
+
+
+async def verify_token(token: str):
+    credential_exc = HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, 
+                                   detail="Could not validate credentials",
+                                   headers={"WWW-Authenticate": "Bearer"})
+    try:
+        pk_file = ""
+        with open("../private_key.pem", "r") as pfile:
+            pk_file += pfile.read()
+
+        payload = jwt.decode(token, pk_file, config("ALGORITHM"))
+        username: str = payload.get("sub")
+        if not username:
+            raise credential_exc
+        
+        expiration = payload.get("exp")
+        if expiration:
+            now = datetime.now().timestamp()
+            if now > expiration:
+                new_access_token = await create_access_token(payload)
+                return new_access_token
+    except JWTError as jtwerr:
+        print(jtwerr)
+        raise credential_exc
+        
+    return username
+
+
 async def get_current_user(token: Annotated[str, Depends(oauth2_schemes)]):
     """
         JWT Verification (Use compile token name)
         Use for decoding JWT into separated pieces
     """
-    try:
-        payload = jwt.decode(token, config("APPLICATION_SECRET_KEY", config("ALGORITHM")))
-        username: str = payload.get("sub")
-
-        if username is None:
-            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token or token doesn't exist.")
-        
-    except JWTError as jwterr:
-        print(f"Bearer <unidentified_token>: {jwterr}")
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Sub segmentation header cannot be reached")
-    
+    credential_exc = HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, 
+                                   detail="Could not validate credentials",
+                                   headers={"WWW-Authenticate": "Bearer"})
+    username = await verify_token(token=token)
     user = user_connection.getUser(login_id=username)
     if not user:
-        return False
+        raise credential_exc
     
-    if not jwt.get_unverified_header(token).get("alg") == config("ALGORITHM"):
-        print("no alg header")
-        return None
-
-    
-    # filter what data going to be served
-    user_information = {"user_id": user.user_id, "login_id": user.login_id, "grade": user.grade,
+    user_information =  {"user_id": user.user_id, "login_id": user.login_id, "grade": user.grade,
                         "point": user.point, "point2": user.point_2, "email": user.email}
     return user_information
 
@@ -63,10 +79,24 @@ def authenticate_user(username: str, password: str):
 
 async def create_access_token(data: dict, expires_date: timedelta):
     toEncode = data.copy()
-    expires = datetime.utcnow() + expires_date if expires_date else datetime.utcnow() + timedelta(minutes=int(config("ACCESS_TOKEN_VOID")))
+    expires = datetime.now() + expires_date if expires_date else datetime.now() + timedelta(minutes=int(config("ACCESS_TOKEN_VOID")))
     toEncode.update({"exp": expires})
     algorithm = config("ALGORITHM")
-    s_key = config("APPLICATION_SECRET_KEY")
+    #s_key = config("APPLICATION_SECRET_KEY")
+    privateKey = ""
+    with open("../private_key.pem", "r") as pk_file:
+        privateKey += pk_file.read()
     
-    encode_jwt = jwt.encode(toEncode, s_key, algorithm)
+    encode_jwt = jwt.encode(toEncode, privateKey, algorithm)
     return encode_jwt
+
+async def create_refresh_token(data: dict, expires_date: timedelta):
+    toEncode = data.copy()
+    expires_data = datetime.now() + expires_date if expires_date else datetime.now() + timedelta(minutes=int(config("REFRESH_TOKEN_VOID")))
+    toEncode.update({"exp": expires_data})
+    algorithm = config("ALGORITHM")
+    privatekey_file = ""
+    with open("../private_key.pem", 'r') as pk_file:
+        privatekey_file += pk_file.read()
+    EncodeJwt = jwt.encode(toEncode, privatekey_file, algorithm=algorithm)
+    return EncodeJwt

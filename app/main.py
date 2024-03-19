@@ -55,7 +55,7 @@ async def exception_handler_routes(request: Request, exc: HTTPException):
         konteks.update({"X-Access-Restricted": f"{exc.status_code} {exc.detail}",
                         "X-User-Category": "Anonymous"})
         return JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED, 
-                              content={"message": "You're not allowed to access the content, please do authenticate/login."},
+                              content={"message": exc.detail},
                               headers=konteks)
     elif exc.status_code == status.HTTP_400_BAD_REQUEST:
         konteks.update({"X-Access-Restricted": exc.detail})

@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, Integer, DateTime, BINARY
+from sqlalchemy import Column, String, Integer, DateTime, BINARY, ForeignKey
 from sqlalchemy.orm import relationship
 from connections.db import declarative_dbconn
 from datetime import datetime
@@ -32,3 +32,12 @@ class TWebAdmin(declarative_dbconn):
     level = Column(Integer)
 
     #web_admin = relationship("TItemMall", back_populates="web_user")
+
+class TUserLogon(declarative_dbconn):
+    __tablename__ = "TUserLogon"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    user_id = Column(Integer)
+    login_id = Column(String)
+    refresh_token = Column(String)
+    date_login = Column(DateTime, default=datetime.now())

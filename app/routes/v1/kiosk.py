@@ -13,14 +13,17 @@ kiosk = APIRouter(prefix="/application/api/v1/routes/kiosk", tags=['Kiosk'])
 kiosk_conn = KioskMall()
 buy_kiosk_item = ProceedBuyItem()
 
-@kiosk.get("/item_malls", response_class=ORJSONResponse, response_model=KioskResponse)
-async def get_kiosk(response: Response,
-              search: str = Query(None, alias="search"), 
-              offset: int = Query(1, alias="page"),
-              limit: int = Query(10, alias="perpage"),
-              application_auth_token: str = Cookie(None)):
+async def get_kiosk_items(response: Response, search: str = Query(None, alias="search"), 
+                    offset: int = Query(1, alias="page"),
+                    limit: int = Query(10, alias="perpage")):
     perpage = (offset - 1) * limit
     kiosk_items = await kiosk_conn.getMall(search, limit, perpage)
+    return kiosk_items
+
+
+@kiosk.get("/item_malls", response_class=ORJSONResponse, response_model=KioskResponse)
+async def get_kiosk(kiosk: list = Depends(get_kiosk_items), access_token: str = Cookie(None)):
+    
     showed_kiosk_detail = [Kiosk(mall_id=item.mall_id, 
                                  kiosk_detail=
                                      KioskDetail(
@@ -32,16 +35,17 @@ async def get_kiosk(response: Response,
                                          item_price=item.item_price,
                                          item_category=item.item_category, 
                                          date_expired_item=item.date_expired_item.strftime('%d %B %Y, %H:%M:%S')))
-                            for item in kiosk_items]
+                            for item in kiosk]
 
     konteks = {"status": status.HTTP_200_OK,
                "total_records": kiosk_conn.total_items_in_kiosk, 
-               "kiosk_items": showed_kiosk_detail}
+               "kiosk_items": showed_kiosk_detail,
+               "avail_user": False}
     
-    if not application_auth_token:
-        response.headers['X-User-Status'] = "Anonymous"
-    else:
-        response.headers['X-User-Status'] = f"User {application_auth_token.get("login_id")}"
+    if access_token:
+        user = await get_current_user(access_token)
+        konteks.update({"avail_user": True, "login_user": user.get("login_id"), "user_email": user.get("email"),
+                        "user_point": user.get("point")})
     
     return konteks
 
@@ -62,3 +66,4 @@ async def buy_item_from_kiosk(request: Request, mall_id: int,
     
     konteks = {"status": None, "message": buy_item.get("status")}
     return konteks
+
