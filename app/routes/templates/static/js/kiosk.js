@@ -106,7 +106,8 @@ function createItemCard(item) {
     spanPrice.textContent = `${item.kiosk_detail.item_price} Point`;
     spanPrice.style.fontSize = "1em"; // Responsive font size
 
-    const buttonBuy = document.createElement("a");
+    const buttonBuy = document.createElement("button");
+    buttonBuy.id = `buyItem_${item.mall_id}`;
     buttonBuy.classList.add("btn", "btn-xs", "btn-primary");
 
     const buyIconButton = document.createElement("span");
@@ -232,8 +233,6 @@ async function kiosk_items(items, totalPages, currentPage, perPage, search) {
         // Handle error here
     }
 }
-
-
 
 window.addEventListener("load", function() {
     call_kiosk(search=null, page=1, perPage=12);
